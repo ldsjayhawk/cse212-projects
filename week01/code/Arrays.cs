@@ -13,7 +13,23 @@ public static class Arrays
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return []; // replace this return statement with your own
+        // 1. Create array to store the multiples 
+        // 2. Create loop that starts at user given input for starting number until reaching user designated length
+        // 3. In the loop: Add multiple & store in array
+        // 4. Use length of list to determine if you have reached the number of multiples
+
+
+        List<double> multiples = new List<double>();
+        double value = 0;
+
+        while ( multiples.Count < length)
+        {
+            value += number;
+            multiples.Add(value);
+        }
+       
+
+        return multiples.ToArray(); // replace this return statement with your own
     }
 
     /// <summary>
@@ -29,5 +45,15 @@ public static class Arrays
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+
+        // 1. Use RemoveRange to slice 
+
+        List<int> result = new List<int>();
+        List<int> temp = new List<int>();
+
+        temp = data.GetRange(data.Count - amount, amount);
+        data.RemoveRange(data.Count - amount, amount);
+        data.InsertRange(0, temp);
+
     }
 }
