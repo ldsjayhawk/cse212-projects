@@ -19,10 +19,34 @@ public static class SetsAndMaps
     /// that there were no duplicates) and therefore should not be returned.
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
+    public static string Reverse (string word)
+    {
+
+        char[] charArray = word.ToCharArray();
+        Array.Reverse(charArray);
+        return new string(charArray);
+    }
+
     public static string[] FindPairs(string[] words)
     {
+
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        var compareWords = new HashSet<string>(words);
+        var matchingWords = new HashSet<string>();
+    
+        foreach (var x in words)
+        {
+            string reversedWord = Reverse(x);
+
+            if (compareWords.Contains(reversedWord) && (x != reversedWord))
+            {
+                if (string.Compare(x, reversedWord) < 0)
+                {
+                    matchingWords.Add(x + "&" + reversedWord);
+                }
+            }
+        }
+        return matchingWords.ToArray();
     }
 
     /// <summary>
@@ -36,6 +60,12 @@ public static class SetsAndMaps
     /// </summary>
     /// <param name="filename">The name of the file to read</param>
     /// <returns>fixed array of divisors</returns>
+    
+    
+    
+    
+    
+    
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
         var degrees = new Dictionary<string, int>();
@@ -43,6 +73,20 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+
+            string degree = fields[3].Trim();
+            int numPeople = 1;
+
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree] ++;
+            }
+            else
+            {
+                degrees.Add(degree,numPeople);
+            }
+
+
         }
 
         return degrees;
@@ -67,7 +111,47 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
+        var anagrams = new Dictionary<char, int>();
+        string firstWord = word1.Replace(" ","").ToLower();
+        string secondWord = word2.Replace(" ","").ToLower();
+        // int firstWordCount;
+        // int secondWordCount;
+        int letterCount = 1;
+
+        if (firstWord.Length != secondWord.Length)
+        {
+            return false;
+        }
+
+            foreach (var letter in firstWord)
+            {
+                if (anagrams.ContainsKey(letter))
+                {
+                    anagrams[letter] ++;
+                }
+                else
+                {
+                    anagrams.Add(letter,letterCount);
+                }
+            }
+            foreach (var letter in secondWord)
+            {
+                if (!anagrams.ContainsKey(letter) || anagrams[letter] == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    anagrams[letter] --;  
+                }
+
+            if (anagrams[letter] == 0)
+            {
+                return true;
+            }         
+            }
         return false;
+
     }
 
     /// <summary>
@@ -100,7 +184,35 @@ public static class SetsAndMaps
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
+
         // 3. Return an array of these string descriptions.
-        return [];
+
+        var results = new List<string>();
+
+        foreach (var quake in featureCollection.features)
+        {
+            string earthquake = $"{quake.properties.place} - Mag {quake.properties.mag}";
+            results.Add(earthquake);
+        }
+        return results.ToArray();
+    }
+
+        public class FeatureCollection
+    {
+        public List<Feature> features { get; set; }
+    }
+
+    public class Feature
+    {
+        public Properties properties { get; set; }
+    }
+
+    public class Properties
+    {
+        public decimal mag { get; set; }
+        public string place { get; set; }
     }
 }
+
+
+
